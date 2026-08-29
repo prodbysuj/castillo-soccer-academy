@@ -1,0 +1,134 @@
+:root {
+  /* Brand guide: black, white, and flamingo pink. Black and white carry
+     surfaces, type, and controls. Pink is the least-used of the three —
+     thin rings, small labels, hairlines — matching how the crest uses it. */
+  --black: #000000;
+  --white: #ffffff;
+  /* 12.5:1 on black, 1.7:1 on white. Pink therefore only sits on black, or
+     as a fill that carries black content. Never pink-on-white text. */
+  --pink: #f7b6ce;
+
+  --background: var(--white);
+  --foreground: var(--black);
+  --surface-inverse: var(--black);
+  --on-inverse: var(--white);
+  --on-pink: var(--black);
+
+  --nav-height: 55px;
+
+  /* Consumers override --focus-ring-color on dark surfaces. */
+  --focus-ring-color: var(--black);
+  --focus-ring-color-inverse: var(--pink);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-11: 88px;
+
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-pill: 999px;
+
+  --dur-base: 220ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-body-stack: var(--font-body), system-ui, -apple-system, "Segoe UI",
+    Arial, sans-serif;
+  --font-display-stack: var(--font-display), "Arial Narrow Bold", "Arial Narrow",
+    Impact, sans-serif;
+}
+
+html {
+  height: 100%;
+  color-scheme: light;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + var(--space-2));
+}
+
+html,
+body {
+  max-width: 100vw;
+  /* clip instead of hidden: does not create a scroll container, so the
+     sticky navbar and scroll-padding-top keep working. */
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body-stack);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display-stack);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  color: var(--on-pink);
+  background: var(--pink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}

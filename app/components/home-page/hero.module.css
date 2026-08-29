@@ -1,0 +1,203 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100svh - var(--nav-height));
+  /* No horizontal padding: the photo strip runs edge to edge, so the text
+     blocks pad themselves instead. Vertical rhythm scales with viewport
+     height so the whole composition still fits on short laptops. */
+  padding: clamp(var(--space-4), 6vh, var(--space-8)) 0
+    clamp(var(--space-3), 4vh, var(--space-6));
+  background: var(--background);
+  color: var(--foreground);
+  text-align: center;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+}
+
+/* Black disc with a 1px pink ring — the same treatment the crest gets on
+   a white field. Pink stays a line, not a fill. */
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--pink);
+  border-radius: 50%;
+  background: var(--black);
+}
+
+/* Painted through a mask so the logo takes the brand pink instead of being
+   locked to the SVG's own near-black fill. */
+.ball {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  background-color: var(--pink);
+  -webkit-mask: url("/Football.svg") center / contain no-repeat;
+  mask: url("/Football.svg") center / contain no-repeat;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 900px;
+  margin-top: clamp(var(--space-2), 2.5vh, var(--space-3));
+  padding-inline: var(--space-3);
+  color: var(--black);
+}
+
+.titleTop {
+  font-size: clamp(1.375rem, 4vw, 2.5rem);
+  letter-spacing: 0.26em;
+  line-height: 1;
+}
+
+.titleBottom {
+  font-size: clamp(3rem, 10vw, 6.5rem);
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+}
+
+.tagline {
+  max-width: 560px;
+  margin-top: var(--space-3);
+  padding-inline: var(--space-3);
+  font-size: clamp(0.8125rem, 1.6vw, 0.9375rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.7;
+  text-transform: uppercase;
+  color: var(--black);
+  text-wrap: balance;
+}
+
+.strip {
+  width: 100%;
+  margin-top: clamp(var(--space-4), 5vh, var(--space-8));
+}
+
+.viewport {
+  overflow: hidden;
+  width: 100%;
+  /* Fades the strip out into the section's own background rather than ending
+     on a hard vertical edge. */
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 14%,
+    #000 86%,
+    transparent
+  );
+}
+
+.track {
+  display: flex;
+  gap: var(--space-2);
+  width: max-content;
+  /* Vertical padding leaves room for the hover lift without clipping. */
+  padding: 10px 0 10px var(--space-2);
+  animation: marquee 46s linear infinite;
+}
+
+/* Stop while offscreen, and while a pointer or keyboard focus rests on the
+   strip so a photo can be looked at without it sliding away. */
+.trackPaused,
+.viewport:hover .track,
+.viewport:focus-within .track {
+  animation-play-state: paused;
+}
+
+.card {
+  position: relative;
+  flex-shrink: 0;
+  width: min(76vw, 390px);
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--black);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.image {
+  object-fit: cover;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* Seamless because the track's left padding equals the inter-card gap, so
+   half the doubled track lands card 6 exactly where card 0 started. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero {
+    min-height: 0;
+    padding: var(--space-6) 0 var(--space-4);
+  }
+
+  .badge {
+    width: 78px;
+    height: 78px;
+  }
+
+  .ball {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tagline {
+    letter-spacing: 0.12em;
+  }
+
+  .strip {
+    margin-top: var(--space-6);
+  }
+
+  .track {
+    gap: 14px;
+    padding-left: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .viewport {
+    mask-image: none;
+  }
+
+  .card[aria-hidden="true"] {
+    display: none;
+  }
+}
