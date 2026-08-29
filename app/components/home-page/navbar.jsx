@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { site, navLinks } from "../lib/site";
 import { fill } from "../lib/i18n";
+import { useHydrated } from "../lib/use-hydrated";
 import { useLanguage } from "../language-provider";
 import styles from "./navbar.module.css";
 
@@ -101,7 +102,7 @@ export default function Navbar() {
   const [activeHref, setActiveHref] = useState("/");
   const pathname = usePathname();
   const toggleRef = useRef(null);
-  const reduceMotion = useReducedMotion();
+  const hydrated = useHydrated();
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -167,7 +168,7 @@ export default function Navbar() {
         >
           <motion.div
             initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={hydrated ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className={styles.brandInner}
           >
@@ -189,17 +190,19 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className={`${styles.link} ${isActive ? styles.linkActive : ""} ${
-                  isActive && reduceMotion ? styles.linkActiveStatic : ""
-                }`}
+                className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
                 aria-current={isActive ? "page" : undefined}
               >
-                {isActive && !reduceMotion ? (
-                  <motion.span
-                    className={styles.pill}
-                    layoutId="nav-pill-desktop"
-                    transition={PILL_SPRING}
-                  />
+                {isActive ? (
+                  hydrated ? (
+                    <motion.span
+                      className={styles.pill}
+                      layoutId="nav-pill-desktop"
+                      transition={PILL_SPRING}
+                    />
+                  ) : (
+                    <span className={styles.pill} aria-hidden="true" />
+                  )
                 ) : null}
                 <span className={styles.linkLabel}>{copy.nav[link.key]}</span>
               </Link>
@@ -269,17 +272,19 @@ export default function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={() => handleNavClick(link.href)}
-                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""} ${
-                        isActive && reduceMotion ? styles.mobileLinkActiveStatic : ""
-                      }`}
+                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""}`}
                       aria-current={isActive ? "page" : undefined}
                     >
-                      {isActive && !reduceMotion ? (
-                        <motion.span
-                          className={styles.pill}
-                          layoutId="nav-pill-mobile"
-                          transition={PILL_SPRING}
-                        />
+                      {isActive ? (
+                        hydrated ? (
+                          <motion.span
+                            className={styles.pill}
+                            layoutId="nav-pill-mobile"
+                            transition={PILL_SPRING}
+                          />
+                        ) : (
+                          <span className={styles.pill} aria-hidden="true" />
+                        )
                       ) : null}
                       <span className={styles.linkLabel}>{copy.nav[link.key]}</span>
                     </Link>

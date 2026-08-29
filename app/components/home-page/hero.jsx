@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { site } from "../lib/site";
 import { fill } from "../lib/i18n";
+import { useHydrated } from "../lib/use-hydrated";
 import { useLanguage } from "../language-provider";
 import styles from "./hero.module.css";
 
@@ -44,6 +45,7 @@ const badge = {
 
 export default function Hero() {
   const { copy } = useLanguage();
+  const hydrated = useHydrated();
   const [offscreen, setOffscreen] = useState(false);
   const viewportRef = useRef(null);
 
@@ -71,16 +73,11 @@ export default function Hero() {
         className={styles.stage}
         variants={container}
         initial="hidden"
-        animate="show"
+        animate={hydrated ? "show" : "hidden"}
       >
         <motion.div className={styles.badge} variants={badge}>
           <span className={styles.ring} aria-hidden="true" />
-          <motion.span
-            aria-hidden="true"
-            className={styles.ball}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 44, ease: "linear", repeat: Infinity }}
-          />
+          <span aria-hidden="true" className={styles.ball} />
         </motion.div>
 
         <motion.h1 id="hero-title" className={styles.title} variants={item}>
