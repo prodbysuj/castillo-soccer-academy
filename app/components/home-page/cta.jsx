@@ -1,4 +1,8 @@
+"use client";
+
 import { site } from "../lib/site";
+import { fill } from "../lib/i18n";
+import { useLanguage } from "../language-provider";
 import styles from "./cta.module.css";
 
 function PhoneIcon() {
@@ -28,18 +32,19 @@ function MapPinIcon() {
 }
 
 export default function Cta() {
+  const { copy } = useLanguage();
+
   return (
     <section className={styles.cta} aria-labelledby="cta-heading">
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>Long Beach, California</p>
+        <p className={styles.eyebrow}>{copy.cta.eyebrow}</p>
 
         <h2 id="cta-heading" className={styles.title}>
-          Come train with us
+          {copy.cta.title}
         </h2>
 
         <p className={styles.body}>
-          Call Coach Castillo to talk through programs, schedules, and the right
-          starting point for your player.
+          {fill(copy.cta.body, { name: site.shortName })}
         </p>
 
         <div className={styles.actions}>
@@ -55,7 +60,7 @@ export default function Cta() {
             className={styles.secondary}
           >
             <MapPinIcon />
-            Get directions
+            {copy.cta.directions}
           </a>
         </div>
 

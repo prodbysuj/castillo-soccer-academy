@@ -68,9 +68,10 @@
 }
 
 .titleBottom {
-  font-size: clamp(3rem, 10vw, 6.5rem);
+  font-size: clamp(2.25rem, 8vw, 5.5rem);
   letter-spacing: 0.01em;
   line-height: 0.92;
+  text-wrap: balance;
 }
 
 .tagline {
@@ -87,22 +88,48 @@
 }
 
 .strip {
+  position: relative;
   width: 100%;
   margin-top: clamp(var(--space-4), 5vh, var(--space-8));
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--black);
+  border-radius: 50%;
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-50%);
+  transition: background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.arrowPrev {
+  left: 12px;
+}
+
+.arrowNext {
+  right: 12px;
+}
+
+.arrow svg {
+  width: 18px;
+  height: 18px;
 }
 
 .viewport {
   overflow: hidden;
   width: 100%;
-  /* Fades the strip out into the section's own background rather than ending
-     on a hard vertical edge. */
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    #000 14%,
-    #000 86%,
-    transparent
-  );
+}
+
+.nudge {
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 .track {
@@ -114,11 +141,11 @@
   animation: marquee 46s linear infinite;
 }
 
-/* Stop while offscreen, and while a pointer or keyboard focus rests on the
-   strip so a photo can be looked at without it sliding away. */
+/* Stop while offscreen, while using the arrows, and while a pointer or
+   keyboard focus rests on the strip. */
 .trackPaused,
-.viewport:hover .track,
-.viewport:focus-within .track {
+.strip:hover .track,
+.strip:focus-within .track {
   animation-play-state: paused;
 }
 
@@ -136,11 +163,17 @@
 
 .image {
   object-fit: cover;
+  max-width: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     transform: translateY(-5px);
+  }
+
+  .arrow:hover {
+    background: var(--white);
+    color: var(--black);
   }
 }
 
@@ -183,6 +216,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .arrow {
+    display: none;
+  }
+
+  .nudge {
+    transform: none !important;
+    transition: none;
+  }
+
   .track {
     animation: none;
     flex-wrap: wrap;
@@ -191,10 +233,6 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: var(--space-2) var(--space-3);
-  }
-
-  .viewport {
-    mask-image: none;
   }
 
   .card[aria-hidden="true"] {

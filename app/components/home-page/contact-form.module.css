@@ -1,0 +1,257 @@
+.section {
+  padding: var(--space-11) var(--space-3);
+  background: var(--background);
+  color: var(--foreground);
+  border-top: 1px solid var(--black);
+  scroll-margin-top: var(--nav-height);
+}
+
+.flush {
+  border-top: 0;
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-6);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.intro,
+.success {
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: var(--space-2);
+  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  line-height: 0.95;
+  letter-spacing: 0.015em;
+  text-wrap: balance;
+}
+
+.lead {
+  max-width: 520px;
+  margin: var(--space-2) auto 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.summary {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+}
+
+.summary:focus {
+  outline-offset: 3px;
+}
+
+.summaryTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.summaryList {
+  margin-top: 10px;
+  padding-left: 18px;
+}
+
+.summaryList a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.optional {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--black);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: var(--black);
+  font: inherit;
+  appearance: none;
+}
+
+select.input {
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath fill='%23000' d='M1.2.4 6 6.2 10.8.4 12 1.6 6 8 0 1.6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+}
+
+.textarea {
+  min-height: 120px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.input.invalid {
+  border-width: 2px;
+}
+
+.hint,
+.error {
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.fieldset {
+  border: 0;
+  padding: 0;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--black);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.pill:has(input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.pill:has(input:checked) {
+  background: var(--black);
+  color: var(--white);
+}
+
+.pill input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--black);
+  border-radius: var(--radius-pill);
+  background: var(--black);
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.success .submit {
+  margin-top: var(--space-4);
+}
+
+.aside {
+  font-size: 0.9375rem;
+}
+
+.phone {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .submit:hover {
+    background: var(--white);
+    color: var(--black);
+  }
+}
+
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .span {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 699px) {
+  .section {
+    padding: var(--space-8) var(--space-2);
+  }
+
+  .submit {
+    width: 100%;
+  }
+}

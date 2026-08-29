@@ -1,5 +1,6 @@
 import { Bebas_Neue, Source_Sans_3 } from "next/font/google";
 import MotionProvider from "./components/motion-provider";
+import { LanguageProvider } from "./components/language-provider";
 import { site } from "./components/lib/site";
 import "./globals.css";
 
@@ -28,7 +29,9 @@ export default function RootLayout({ children }) {
       className={`${bebasNeue.variable} ${sourceSans.variable}`}
     >
       <body>
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </MotionProvider>
       </body>
     </html>
   );

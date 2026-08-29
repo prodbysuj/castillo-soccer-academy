@@ -4,33 +4,17 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { site } from "../lib/site";
+import { fill } from "../lib/i18n";
+import { useLanguage } from "../language-provider";
 import styles from "./hero.module.css";
 
-const slides = [
-  {
-    src: "/slideshow-images/soccer-1.jpg",
-    alt: "Two young athletes balancing on blue stability balls during outdoor soccer training",
-  },
-  {
-    src: "/slideshow-images/soccer-2.webp",
-    alt: "Players practicing ball control drills on the field at Prof Castillo Soccer Academy",
-  },
-  {
-    src: "/slideshow-images/soccer-3.webp",
-    alt: "Youth soccer players working on footwork and agility during a training session",
-  },
-  {
-    src: "/slideshow-images/soccer-4.webp",
-    alt: "Coach leading a group of young players through a soccer skills exercise",
-  },
-  {
-    src: "/slideshow-images/soccer-5.webp",
-    alt: "Athletes running drills together on the pitch under sunny skies",
-  },
-  {
-    src: "/slideshow-images/soccer-6.webp",
-    alt: "Team training moment with players focused on technique and teamwork",
-  },
+const SLIDE_SRC = [
+  "/slideshow-images/soccer-1.jpg",
+  "/slideshow-images/soccer-2.webp",
+  "/slideshow-images/soccer-3.webp",
+  "/slideshow-images/soccer-4.webp",
+  "/slideshow-images/soccer-5.webp",
+  "/slideshow-images/soccer-6.webp",
 ];
 
 const container = {
@@ -58,9 +42,31 @@ const badge = {
   },
 };
 
+function Chevron({ direction }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d={
+          direction === "prev"
+            ? "M14.5 5 7.5 12l7 7"
+            : "M9.5 5 16.5 12l-7 7"
+        }
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function Hero() {
+  const { copy } = useLanguage();
   const [offscreen, setOffscreen] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [nudge, setNudge] = useState(0);
   const viewportRef = useRef(null);
+  const trackRef = useRef(null);
 
   useEffect(() => {
     const node = viewportRef.current;
@@ -74,7 +80,24 @@ export default function Hero() {
     return () => observer.disconnect();
   }, []);
 
+  function step(direction) {
+    const track = trackRef.current;
+    const card = track?.querySelector(`.${styles.card}`);
+    if (!track || !card) return;
+
+    const gap = Number.parseFloat(getComputedStyle(track).gap) || 16;
+    const delta = card.getBoundingClientRect().width + gap;
+
+    setPaused(true);
+    setNudge((value) => value - direction * delta);
+  }
+
+  const slides = SLIDE_SRC.map((src, index) => ({
+    src,
+    alt: fill(copy.hero.slides[index], { name: site.name }),
+  }));
   const copies = [...slides, ...slides];
+  const stopped = paused || offscreen;
 
   return (
     <section id="training" className={styles.hero} aria-labelledby="hero-title">
@@ -95,24 +118,38 @@ export default function Hero() {
         </motion.div>
 
         <motion.h1 id="hero-title" className={styles.title} variants={item}>
-          <span className={styles.titleTop}>Prof Castillo</span>
-          <span className={styles.titleBottom}>Soccer Academy</span>
+          <span className={styles.titleTop}>Profe Castillo’s</span>
+          <span className={styles.titleBottom}>{copy.hero.lineTwo}</span>
         </motion.h1>
 
         <motion.p className={styles.tagline} variants={item}>
-          {site.tagline}
+          {copy.tagline}
         </motion.p>
 
         <motion.div
           className={styles.strip}
           variants={item}
           role="group"
-          aria-label={`Training photos from ${site.name}`}
+          aria-label={fill(copy.hero.photos, { name: site.name })}
         >
+          <button
+            type="button"
+            className={`${styles.arrow} ${styles.arrowPrev}`}
+            aria-label={copy.hero.prev}
+            onClick={() => step(-1)}
+          >
+            <Chevron direction="prev" />
+          </button>
+
           <div className={styles.viewport} ref={viewportRef}>
             <div
-              className={`${styles.track} ${offscreen ? styles.trackPaused : ""}`}
+              className={styles.nudge}
+              style={{ transform: `translateX(${nudge}px)` }}
             >
+              <div
+                ref={trackRef}
+                className={`${styles.track} ${stopped ? styles.trackPaused : ""}`}
+              >
               {copies.map((slide, index) => {
                 const isDuplicate = index >= slides.length;
 
@@ -133,8 +170,18 @@ export default function Hero() {
                   </div>
                 );
               })}
+              </div>
             </div>
           </div>
+
+          <button
+            type="button"
+            className={`${styles.arrow} ${styles.arrowNext}`}
+            aria-label={copy.hero.next}
+            onClick={() => step(1)}
+          >
+            <Chevron direction="next" />
+          </button>
         </motion.div>
       </motion.div>
     </section>

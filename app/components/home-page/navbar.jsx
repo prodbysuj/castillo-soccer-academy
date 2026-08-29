@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { site, navLinks } from "../lib/site";
+import { fill } from "../lib/i18n";
+import { useLanguage } from "../language-provider";
 import styles from "./navbar.module.css";
 
 const MAPS_URL = site.mapsUrl;
 const PHONE_HREF = site.phoneHref;
 const PHONE_LABEL = site.phoneLabel;
-const MAPS_LABEL = `Open ${site.name} in Google Maps`;
 
 function MapPinIcon() {
   return (
@@ -38,10 +39,99 @@ function PhoneIcon() {
   );
 }
 
+const HOME_SECTIONS = [
+  { href: "/", id: "training" },
+  { href: "/#programs", id: "programs" },
+  { href: "/#about", id: "about" },
+];
+
+const PILL_SPRING = { type: "spring", stiffness: 420, damping: 34 };
+
+function hrefFromHash(hash) {
+  if (!hash) return "/";
+  const match = HOME_SECTIONS.find((section) => section.href.endsWith(hash));
+  return match?.href ?? "/";
+}
+
+function sectionFromScroll() {
+  const offset = 200;
+  let href = "/";
+
+  for (const section of HOME_SECTIONS) {
+    const node = document.getElementById(section.id);
+    if (!node) continue;
+    if (node.getBoundingClientRect().top <= offset) {
+      href = section.href;
+    }
+  }
+
+  return href;
+}
+
+function LanguageSwitch() {
+  const { locale, setLocale, copy } = useLanguage();
+
+  return (
+    <div className={styles.lang} role="group" aria-label={copy.nav.language}>
+      <button
+        type="button"
+        className={`${styles.langBtn} ${locale === "en" ? styles.langBtnActive : ""}`}
+        aria-pressed={locale === "en"}
+        aria-label={copy.nav.english}
+        onClick={() => setLocale("en")}
+      >
+        EN
+      </button>
+      <button
+        type="button"
+        className={`${styles.langBtn} ${locale === "es" ? styles.langBtnActive : ""}`}
+        aria-pressed={locale === "es"}
+        aria-label={copy.nav.spanish}
+        onClick={() => setLocale("es")}
+      >
+        ES
+      </button>
+    </div>
+  );
+}
+
 export default function Navbar() {
+  const { copy } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState("/");
   const pathname = usePathname();
   const toggleRef = useRef(null);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveHref(pathname);
+      return;
+    }
+
+    setActiveHref(hrefFromHash(window.location.hash));
+
+    let frame = 0;
+
+    function update() {
+      frame = 0;
+      setActiveHref(sectionFromScroll());
+    }
+
+    function onScroll() {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("hashchange", update);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("hashchange", update);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -56,12 +146,23 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [menuOpen]);
 
+  function isLinkActive(href) {
+    return activeHref === href;
+  }
+
+  function handleNavClick(href) {
+    setActiveHref(href);
+    setMenuOpen(false);
+  }
+
+  const mapsLabel = fill(copy.nav.openMaps, { name: site.name });
+
   return (
-    <nav className={styles.nav} aria-label="Main navigation">
+    <nav className={styles.nav} aria-label={copy.nav.main}>
       <div className={styles.bar}>
         <Link
           href="/"
-          aria-label={`${site.name} home`}
+          aria-label={`${site.name} ${copy.nav.homeAria}`}
           className={styles.brand}
         >
           <motion.div
@@ -74,68 +175,77 @@ export default function Navbar() {
               <span className={styles.markBall} />
             </span>
             <span className={styles.wordmark}>
-              <span className={styles.brandTop}>Prof Castillo</span>
-              <span className={styles.brandBottom}>Soccer Academy</span>
+              <span className={styles.brandTop}>{site.shortName}</span>
             </span>
           </motion.div>
         </Link>
 
         <div className={styles.desktopLinks}>
           {navLinks.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = isLinkActive(link.href);
 
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
+                onClick={() => handleNavClick(link.href)}
+                className={`${styles.link} ${isActive ? styles.linkActive : ""} ${
+                  isActive && reduceMotion ? styles.linkActiveStatic : ""
+                }`}
                 aria-current={isActive ? "page" : undefined}
               >
-                {link.name}
+                {isActive && !reduceMotion ? (
+                  <motion.span
+                    className={styles.pill}
+                    layoutId="nav-pill-desktop"
+                    transition={PILL_SPRING}
+                  />
+                ) : null}
+                <span className={styles.linkLabel}>{copy.nav[link.key]}</span>
               </Link>
             );
           })}
         </div>
 
-        <div className={styles.desktopMeta}>
+        <div className={styles.tools}>
+          <LanguageSwitch />
           <a
             href={MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={MAPS_LABEL}
+            aria-label={mapsLabel}
             className={styles.mapLink}
           >
             <MapPinIcon />
           </a>
+          <button
+            ref={toggleRef}
+            type="button"
+            className={`${styles.toggle} ${menuOpen ? styles.toggleOpen : ""}`}
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? copy.nav.closeMenu : copy.nav.openMenu}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              {menuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.75"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
         </div>
-
-        <button
-          ref={toggleRef}
-          type="button"
-          className={`${styles.toggle} ${menuOpen ? styles.toggleOpen : ""}`}
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-        >
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            {menuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.75"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.75"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            )}
-          </svg>
-        </button>
       </div>
 
       <AnimatePresence>
@@ -152,17 +262,26 @@ export default function Navbar() {
             <div className={styles.mobileInner}>
               <div className={styles.mobileNavGroup}>
                 {navLinks.map((link) => {
-                  const isActive = pathname === link.href;
+                  const isActive = isLinkActive(link.href);
 
                   return (
                     <Link
                       key={link.href}
                       href={link.href}
-                      onClick={() => setMenuOpen(false)}
-                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""}`}
+                      onClick={() => handleNavClick(link.href)}
+                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""} ${
+                        isActive && reduceMotion ? styles.mobileLinkActiveStatic : ""
+                      }`}
                       aria-current={isActive ? "page" : undefined}
                     >
-                      {link.name}
+                      {isActive && !reduceMotion ? (
+                        <motion.span
+                          className={styles.pill}
+                          layoutId="nav-pill-mobile"
+                          transition={PILL_SPRING}
+                        />
+                      ) : null}
+                      <span className={styles.linkLabel}>{copy.nav[link.key]}</span>
                     </Link>
                   );
                 })}
@@ -179,11 +298,11 @@ export default function Navbar() {
                   href={MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={MAPS_LABEL}
+                  aria-label={mapsLabel}
                   className={styles.mobileMapLink}
                 >
                   <MapPinIcon />
-                  Open in Maps
+                  {copy.nav.openInMaps}
                 </a>
               </div>
             </div>
