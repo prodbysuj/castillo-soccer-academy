@@ -19,8 +19,6 @@ export const dictionaries = {
     hero: {
       lineTwo: "Youth Soccer Academy",
       photos: "Training photos from {name}",
-      prev: "Previous photos",
-      next: "Next photos",
       slides: [
         "Two young athletes balancing on blue stability balls during outdoor soccer training",
         "Players practicing ball control drills on the field at {name}",
@@ -132,8 +130,6 @@ export const dictionaries = {
     hero: {
       lineTwo: "Academia de Fútbol Juvenil",
       photos: "Fotos de entrenamiento de {name}",
-      prev: "Fotos anteriores",
-      next: "Fotos siguientes",
       slides: [
         "Dos jóvenes atletas equilibrándose sobre pelotas de estabilidad azules durante un entrenamiento al aire libre",
         "Jugadores practicando control de balón en la cancha de {name}",
