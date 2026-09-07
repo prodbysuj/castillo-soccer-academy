@@ -25,7 +25,6 @@ const STARTER_CHIPS = [
 
 const CHAT_URL = "/api/curry-up/chat";
 const HEALTH_URL = "/api/curry-up/health";
-const SESSION_URL = "/api/curry-up/session";
 
 function createMessage(role, text) {
   return {
@@ -385,13 +384,6 @@ async function requestBotReply(message) {
   };
 }
 
-async function resetConversation() {
-  const response = await fetch(SESSION_URL, { method: "DELETE" });
-  if (!response.ok) {
-    throw new Error("Could not start a new chat.");
-  }
-}
-
 function ChatIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -413,6 +405,34 @@ function CloseIcon() {
         stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function ExpandIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M9 5H5v4M15 5h4v4M5 15v4h4M19 15v4h-4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function CollapseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M9 5v4H5M15 5v4h4M5 15h4v4M19 15h-4v4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -444,6 +464,7 @@ export function RestaurantChatWidget() {
   const [unread, setUnread] = useState(1);
   const [hasWelcomed, setHasWelcomed] = useState(false);
   const [healthReady, setHealthReady] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const panelRef = useRef(null);
   const listRef = useRef(null);
@@ -452,7 +473,7 @@ export function RestaurantChatWidget() {
   const sendingRef = useRef(false);
 
   function scrollToBottom() {
-    const node = listRef.current;
+    const node = panelRef.current;
     if (!node) return;
     node.scrollTo({ top: node.scrollHeight, behavior: "smooth" });
   }
@@ -513,6 +534,32 @@ export function RestaurantChatWidget() {
   }, [messages, typing, open]);
 
   useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      if (window.localStorage.getItem("cup-chat-expanded") === "1") {
+        setExpanded(true);
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const mobile = window.matchMedia("(max-width: 767px)");
+
+    function lockBody() {
+      document.body.style.overflow = mobile.matches ? "hidden" : "";
+    }
+
+    lockBody();
+    mobile.addEventListener("change", lockBody);
+    return () => {
+      mobile.removeEventListener("change", lockBody);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return undefined;
 
     function onKeyDown(event) {
@@ -544,6 +591,14 @@ export function RestaurantChatWidget() {
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  function toggleExpanded() {
+    setExpanded((current) => {
+      const next = !current;
+      window.localStorage.setItem("cup-chat-expanded", next ? "1" : "0");
+      return next;
+    });
+  }
 
   function closePanel() {
     setOpen(false);
@@ -607,26 +662,19 @@ export function RestaurantChatWidget() {
     sendMessage(input);
   }
 
-  async function handleNewChat() {
-    if (sendingRef.current) return;
-
-    try {
-      await resetConversation();
-      setHasWelcomed(false);
-      setMessages([]);
-      setChips(STARTER_CHIPS);
-      setError("");
-      setInput("");
-      inputRef.current?.focus();
-    } catch (caught) {
-      setError(
-        caught instanceof Error ? caught.message : "Could not start a new chat."
-      );
-    }
-  }
-
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${expanded ? styles.expanded : ""}`}>
+      {open && expanded ? (
+        <button
+          type="button"
+          className={styles.backdrop}
+          aria-label="Dock chat to the corner"
+          onClick={() => {
+            setExpanded(false);
+            window.localStorage.setItem("cup-chat-expanded", "0");
+          }}
+        />
+      ) : null}
       {open && (
         <section
           ref={panelRef}
@@ -636,59 +684,28 @@ export function RestaurantChatWidget() {
           aria-labelledby={titleId}
         >
           <header className={styles.header}>
-            <div className={styles.brand}>
-              <span className={styles.mark} aria-hidden="true">
-                CU
-              </span>
-              <div>
-                <h2 id={titleId} className={styles.title}>
-                  {RESTAURANT.name}
-                </h2>
-                <p className={styles.status}>
-                  <span
-                    className={`${styles.dot} ${online ? styles.dotOn : styles.dotOff}`}
-                    aria-hidden="true"
-                  />
-                  {online
-                    ? "Online · connected to assistant"
-                    : "Offline · can’t connect"}
-                </p>
-              </div>
-            </div>
-            <div className={styles.headerTools}>
-              <button
-                type="button"
-                className={styles.newChat}
-                onClick={handleNewChat}
-              >
-                New chat
-              </button>
-              <button
-                type="button"
-                className={styles.iconButton}
-                onClick={closePanel}
-                aria-label="Close chat"
-              >
-                <CloseIcon />
-              </button>
-            </div>
-          </header>
-
-          <p className={styles.disclosure}>AI assistant for Curry Up Pizza</p>
-
-          <div className={styles.actions}>
-            <a className={styles.action} href={RESTAURANT.phoneHref}>
-              Call now
-            </a>
-            <a
-              className={styles.action}
-              href={RESTAURANT.mapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <h2 id={titleId} className={styles.srOnly}>
+              {RESTAURANT.name}
+            </h2>
+            <button
+              type="button"
+              className={`${styles.iconButton} ${styles.layoutToggle}`}
+              onClick={toggleExpanded}
+              aria-label={
+                expanded ? "Dock chat to the corner" : "Open chat larger in the center"
+              }
             >
-              Directions
-            </a>
-          </div>
+              {expanded ? <CollapseIcon /> : <ExpandIcon />}
+            </button>
+            <button
+              type="button"
+              className={`${styles.iconButton} ${styles.mobileClose}`}
+              onClick={closePanel}
+              aria-label="Close chat"
+            >
+              <CloseIcon />
+            </button>
+          </header>
 
           <div
             ref={listRef}
@@ -698,7 +715,12 @@ export function RestaurantChatWidget() {
             aria-relevant="additions"
           >
             {messages.length === 0 && !typing && (
-              <p className={styles.empty}>Say hi and we’ll get you sorted.</p>
+              <div className={styles.empty}>
+                <span className={styles.emptyMark} aria-hidden="true">
+                  CU
+                </span>
+                <p>Ask about the menu, hours, or an order.</p>
+              </div>
             )}
 
             {messages.map((message) => (
@@ -708,52 +730,68 @@ export function RestaurantChatWidget() {
                   message.role === "user" ? styles.rowUser : styles.rowBot
                 }`}
               >
-                <div
-                  className={`${styles.bubble} ${
-                    message.role === "user" ? styles.bubbleUser : styles.bubbleBot
-                  }`}
-                >
-                  <MessageContent text={message.text} role={message.role} />
+                {message.role === "bot" ? (
+                  <span className={styles.avatar} aria-hidden="true">
+                    CU
+                  </span>
+                ) : null}
+                <div className={styles.stack}>
+                  <div
+                    className={`${styles.bubble} ${
+                      message.role === "user" ? styles.bubbleUser : styles.bubbleBot
+                    }`}
+                  >
+                    <MessageContent text={message.text} role={message.role} />
+                  </div>
+                  <time
+                    className={styles.time}
+                    dateTime={new Date(message.timestamp).toISOString()}
+                  >
+                    {formatTime(message.timestamp)}
+                  </time>
                 </div>
-                <time className={styles.time} dateTime={new Date(message.timestamp).toISOString()}>
-                  {formatTime(message.timestamp)}
-                </time>
               </article>
             ))}
 
             {typing && (
               <div className={`${styles.row} ${styles.rowBot}`} aria-label="Assistant is typing">
-                <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typing}`}>
-                  <span />
-                  <span />
-                  <span />
+                <span className={styles.avatar} aria-hidden="true">
+                  CU
+                </span>
+                <div className={styles.stack}>
+                  <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typing}`}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
-          {error && (
-            <p className={styles.error} role="alert">
-              {error}
-            </p>
-          )}
+          <div className={styles.dock}>
+            {error && (
+              <p className={styles.error} role="alert">
+                {error}
+              </p>
+            )}
 
-          {chips.length > 0 && !typing && (
-            <div className={styles.chips} aria-label="Suggested questions">
-              {chips.map((chip) => (
-                <button
-                  key={chip}
-                  type="button"
-                  className={styles.chip}
-                  onClick={() => handleChip(chip)}
-                >
-                  {chip}
-                </button>
-              ))}
-            </div>
-          )}
+            {chips.length > 0 && !typing && (
+              <div className={styles.chips} aria-label="Suggested questions">
+                {chips.map((chip) => (
+                  <button
+                    key={chip}
+                    type="button"
+                    className={styles.chip}
+                    onClick={() => handleChip(chip)}
+                  >
+                    {chip}
+                  </button>
+                ))}
+              </div>
+            )}
 
-          <form className={styles.composer} onSubmit={handleSubmit}>
+            <form className={styles.composer} onSubmit={handleSubmit}>
             <label className={styles.srOnly} htmlFor={`${titleId}-input`}>
               Message Curry Up Pizza
             </label>
@@ -781,7 +819,8 @@ export function RestaurantChatWidget() {
             >
               <SendIcon />
             </button>
-          </form>
+            </form>
+          </div>
         </section>
       )}
 
