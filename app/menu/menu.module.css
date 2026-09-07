@@ -1,65 +1,35 @@
-.hero {
-  padding: var(--space-8) var(--space-3) var(--space-4);
-  text-align: center;
-}
-
-.banner {
-  width: min(100%, 1000px);
-  margin: 0 auto var(--space-5);
+.pageTitle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-}
-
-.bannerImg {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 7;
-  object-fit: cover;
-}
-
-.title {
-  font-size: clamp(3rem, 8vw, 4.75rem);
-  line-height: 0.95;
-}
-
-.address {
-  margin-top: var(--space-2);
-  color: var(--muted);
-  font-size: 1rem;
-  font-style: normal;
-}
-
-.lead {
-  max-width: 40em;
-  margin: var(--space-3) auto 0;
-  font-size: 1.0625rem;
-  line-height: 1.65;
-  color: var(--muted);
-  text-wrap: pretty;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .jump {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 40;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 var(--space-3) var(--space-4);
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px var(--space-3);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
+  scrollbar-width: thin;
 }
 
 .jump a {
   display: inline-flex;
   align-items: center;
+  flex-shrink: 0;
   min-height: 44px;
-  padding: 0 4px;
+  padding: 0 14px;
   color: var(--ink);
   font-size: 15px;
   font-weight: 600;
+  white-space: nowrap;
   box-shadow: inset 0 -2px 0 transparent;
 }
 
@@ -76,10 +46,9 @@
   margin: 0 auto;
   padding: var(--space-6) var(--space-3);
   border-top: 1px solid var(--line);
-  scroll-margin-top: var(--nav-height);
+  scroll-margin-top: calc(var(--nav-height) + 60px);
 }
 
-.pricesTitle,
 .sectionTitle {
   font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1;
@@ -126,12 +95,6 @@
 .table th:last-child {
   text-align: right;
   font-weight: 700;
-}
-
-.intro {
-  max-width: 40em;
-  margin-top: var(--space-2);
-  line-height: 1.65;
 }
 
 .items {
@@ -208,10 +171,6 @@
 }
 
 @media (min-width: 800px) {
-  .hero {
-    padding-top: var(--space-11);
-  }
-
   .priceGrid,
   .items {
     grid-template-columns: 1fr 1fr;
@@ -225,7 +184,7 @@
 }
 
 @media (max-width: 799px) {
-  .hero,
+  .jump,
   .prices,
   .section {
     padding-left: var(--space-2);

@@ -41,23 +41,17 @@ export default function Hero() {
           const highlight = category.points[0];
 
           return (
-            <Link
-              key={category.id}
-              href={category.href}
-              className={`${styles.tile} ${index === 0 ? styles.tileFeature : ""}`}
-            >
+            <Link key={category.id} href={category.href} className={styles.tile}>
               {image ? (
                 <Image
                   src={image}
                   alt=""
-                  fill
-                  sizes={
-                    index === 0
-                      ? "(max-width: 799px) 100vw, 46vw"
-                      : "(max-width: 799px) 50vw, 28vw"
-                  }
+                  width={900}
+                  height={900}
                   className={styles.tilePhoto}
-                  priority={index === 0}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  sizes="(max-width: 899px) 50vw, 25vw"
+                  priority={index < 2}
                 />
               ) : null}
               <span className={styles.tileShade} aria-hidden="true" />
