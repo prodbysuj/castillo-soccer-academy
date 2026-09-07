@@ -1,19 +1,19 @@
 .root {
-  --cup-accent: #dc2626;
-  --cup-accent-deep: #7f1d1d;
-  --cup-gold: #a16207;
-  --cup-cream: #fef2f2;
-  --cup-paper: #fffdfb;
-  --cup-ink: #450a0a;
-  --cup-muted: #7f1d1d;
-  --cup-line: #fecaca;
+  --cup-accent: #072f8c;
+  --cup-accent-deep: #051f5e;
+  --cup-gold: #8c6407;
+  --cup-cream: #ffffff;
+  --cup-paper: #ffffff;
+  --cup-ink: #202020;
+  --cup-muted: #646464;
+  --cup-line: #cecece;
   --cup-online: #3f6212;
   --cup-away: #a8a29e;
-  --cup-shadow: 0 22px 50px rgba(69, 10, 10, 0.18);
+  --cup-shadow: 0 22px 50px rgba(7, 47, 140, 0.16);
   --cup-radius: 24px;
-  --cup-focus: 3px solid #dc2626;
-  --cup-font: var(--font-body), "Segoe UI", system-ui, sans-serif;
-  --cup-display: var(--font-display), Georgia, serif;
+  --cup-focus: 3px solid #072f8c;
+  --cup-font: var(--font-body), "Josefin Sans", system-ui, sans-serif;
+  --cup-display: var(--font-body), "Josefin Sans", system-ui, sans-serif;
 
   position: fixed;
   right: 20px;
@@ -47,7 +47,7 @@
   height: min(78vh, calc(100vh - 40px));
   overflow: hidden;
   background:
-    radial-gradient(120% 80% at 100% 0%, rgba(254, 202, 202, 0.45), transparent 55%),
+    radial-gradient(120% 80% at 100% 0%, rgba(11, 61, 115, 0.08), transparent 55%),
     var(--cup-cream);
   border: 1px solid var(--cup-line);
   border-radius: var(--cup-radius);
@@ -68,7 +68,7 @@
 }
 
 .thread::-webkit-scrollbar-thumb {
-  background: #fca5a5;
+  background: #9bb6d0;
   border-radius: 999px;
 }
 
@@ -82,7 +82,7 @@
   gap: 6px;
   padding: 8px 8px 0;
   background: transparent;
-  color: #fef2f2;
+  color: var(--cup-cream);
 }
 
 .layoutToggle,
@@ -109,10 +109,10 @@
 .mark {
   width: 26px;
   height: 26px;
-  background: #fef2f2;
-  color: #7f1d1d;
+  background: var(--cup-cream);
+  color: var(--cup-accent-deep);
   font-size: 9px;
-  box-shadow: inset 0 0 0 1px #a16207;
+  box-shadow: inset 0 0 0 1px var(--cup-gold);
 }
 
 .dot {
@@ -148,7 +148,7 @@
   border: 0;
   border-radius: 50%;
   background: var(--cup-accent-deep);
-  color: #fef2f2;
+  color: var(--cup-cream);
   text-decoration: none;
 }
 
@@ -177,7 +177,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #fca5a5 transparent;
+  scrollbar-color: #9bb6d0 transparent;
 }
 
 .empty {
@@ -202,9 +202,7 @@
   width: 56px;
   height: 56px;
   background: #fff;
-  color: #7f1d1d;
-  font-size: 16px;
-  border: 1px solid var(--cup-line);
+  object-fit: cover;
 }
 
 .row {
@@ -237,9 +235,8 @@
   width: 28px;
   height: 28px;
   margin-bottom: 18px;
-  background: #7f1d1d;
-  color: #fef2f2;
-  font-size: 9px;
+  background: #fff;
+  object-fit: cover;
 }
 
 .bubble {
@@ -324,7 +321,7 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.5;
-  color: #7f1d1d;
+  color: var(--cup-accent-deep);
 }
 
 .note,
@@ -338,14 +335,14 @@
 
 .note {
   border-left: 3px solid var(--cup-gold);
-  background: #fffbeb;
-  color: #7c2d12;
+  background: #eef3f8;
+  color: var(--cup-accent-deep);
 }
 
 .warning {
-  border-left: 3px solid #b91c1c;
+  border-left: 3px solid var(--cup-accent);
   background: #fff;
-  color: #450a0a;
+  color: var(--cup-ink);
 }
 
 .calloutTitle {
@@ -366,12 +363,12 @@
   border: 1px solid var(--cup-line);
   border-bottom-left-radius: 6px;
   color: var(--cup-ink);
-  box-shadow: 0 8px 18px rgba(127, 29, 29, 0.05);
+  box-shadow: 0 8px 18px rgba(11, 61, 115, 0.06);
 }
 
 .bubbleUser {
   background: var(--cup-accent);
-  color: #fef2f2;
+  color: var(--cup-cream);
   border-bottom-right-radius: 6px;
 }
 
@@ -380,7 +377,7 @@
   padding-inline: 4px;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: #9a3412;
+  color: var(--cup-muted);
 }
 
 .typing {
@@ -394,7 +391,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #fca5a5;
+  background: #9bb6d0;
   animation: cup-dot 1s ease-in-out infinite;
 }
 
@@ -482,7 +479,7 @@
   border: 1px solid var(--cup-gold);
   border-radius: 50%;
   background: var(--cup-accent-deep);
-  color: #fef2f2;
+  color: var(--cup-cream);
   box-shadow: var(--cup-shadow);
 }
 
@@ -498,8 +495,8 @@
   height: 20px;
   padding: 0 5px;
   border-radius: 999px;
-  background: #450a0a;
-  color: #fef2f2;
+  background: var(--cup-accent-deep);
+  color: var(--cup-cream);
   font-size: 11px;
   font-weight: 700;
   line-height: 20px;
@@ -529,7 +526,7 @@
   .iconButton:hover,
   .send:hover:not(:disabled),
   .launcher:hover {
-    background: #641616;
+    background: #08305c;
   }
 
   .chip:hover {

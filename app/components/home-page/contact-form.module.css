@@ -2,7 +2,7 @@
   padding: var(--space-11) var(--space-3);
   background: var(--background);
   color: var(--foreground);
-  border-top: 1px solid #fecaca;
+  border-top: 1px solid var(--line);
   scroll-margin-top: var(--nav-height);
 }
 
@@ -232,8 +232,8 @@ select.input {
 
 @media (hover: hover) and (pointer: fine) {
   .submit:hover {
-    background: var(--ink);
-    border-color: var(--ink);
+    background: var(--navy-focus);
+    border-color: var(--navy-focus);
     color: var(--cream);
   }
 }

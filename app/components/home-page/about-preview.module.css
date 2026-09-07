@@ -2,7 +2,7 @@
   padding: var(--space-11) var(--space-3);
   background: var(--background);
   color: var(--foreground);
-  border-top: 1px solid #fecaca;
+  border-top: 1px solid var(--line);
   scroll-margin-top: var(--nav-height);
 }
 
@@ -12,6 +12,20 @@
   align-items: start;
   max-width: 1000px;
   margin: 0 auto;
+}
+
+.photo {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.photoImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  object-fit: cover;
 }
 
 .panel {
@@ -30,7 +44,7 @@
 }
 
 .panelEyebrow {
-  color: var(--gold);
+  color: var(--on-inverse-muted);
 }
 
 .eyebrow {
@@ -100,10 +114,8 @@
   border-radius: var(--radius-pill);
   background: var(--red);
   color: var(--cream);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
   transition: background-color var(--dur-base) var(--ease-out),
     color var(--dur-base) var(--ease-out),
     border-color var(--dur-base) var(--ease-out);
@@ -111,8 +123,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .link:hover {
-    background: var(--ink);
-    border-color: var(--ink);
+    background: var(--navy-focus);
+    border-color: var(--navy-focus);
   }
 }
 
@@ -122,7 +134,18 @@
     gap: var(--space-8);
   }
 
+  .photo {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    min-height: 100%;
+  }
+
+  .panel {
+    grid-column: 2;
+  }
+
   .copy {
+    grid-column: 2;
     text-align: left;
   }
 

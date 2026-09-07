@@ -43,11 +43,18 @@ export default function Cta() {
         </p>
 
         <div className={styles.actions}>
-          <a href={site.phoneHref} className={styles.primary}>
+          <a
+            href={site.orderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.primary}
+          >
+            Order Now
+          </a>
+          <a href={site.phoneHref} className={styles.secondary}>
             <PhoneIcon />
             {site.phoneLabel}
           </a>
-
           <a
             href={site.mapsUrl}
             target="_blank"

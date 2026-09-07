@@ -1,7 +1,9 @@
+import Image from "next/image";
 import Navbar from "../components/home-page/navbar";
 import Cta from "../components/home-page/cta";
 import RestaurantChatWidget from "../../curry-up-pizza-chat/RestaurantChatWidget";
 import { site } from "../components/lib/site";
+import { menuImage } from "../components/lib/menu-images";
 import {
   cyoPrices,
   menuSections,
@@ -21,8 +23,19 @@ export default function MenuPage() {
       <Navbar />
       <main className={pageStyles.main}>
         <header className={styles.hero}>
-          <p className={styles.eyebrow}>Menu</p>
-          <h1 className={styles.title}>What we serve</h1>
+          <div className={styles.banner}>
+            <Image
+              src={site.banner}
+              alt=""
+              width={1600}
+              height={700}
+              priority
+              className={styles.bannerImg}
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
+          <h1 className={styles.title}>Menu</h1>
+          <p className={styles.address}>{site.address}</p>
           <p className={styles.lead}>
             Specialty pizza prices apply to The Classics, Indian pizzas, and
             Halal pizzas. Craft Your Own has its own list. Vegan pizzas are
@@ -64,20 +77,40 @@ export default function MenuPage() {
             </h2>
             {section.intro ? <p className={styles.intro}>{section.intro}</p> : null}
             <ul className={styles.items}>
-              {section.items.map((item) => (
-                <li key={item.name} className={styles.item}>
-                  <div className={styles.itemHead}>
-                    <h3 className={styles.itemName}>{item.name}</h3>
-                    {item.price ? (
-                      <p className={styles.itemPrice}>{item.price}</p>
+              {section.items.map((item) => {
+                const image = menuImage(item.name);
+
+                return (
+                  <li key={item.name} className={styles.item}>
+                    {image ? (
+                      <div className={styles.itemMedia}>
+                        <Image
+                          src={image}
+                          alt=""
+                          width={800}
+                          height={600}
+                          className={styles.itemPhoto}
+                          style={{ width: "100%", height: "auto" }}
+                        />
+                      </div>
                     ) : null}
-                  </div>
-                  {item.description ? (
-                    <p className={styles.itemBody}>{item.description}</p>
-                  ) : null}
-                  {item.note ? <p className={styles.itemNote}>{item.note}</p> : null}
-                </li>
-              ))}
+                    <div className={styles.itemCopy}>
+                      <div className={styles.itemHead}>
+                        <h3 className={styles.itemName}>{item.name}</h3>
+                        {item.price ? (
+                          <p className={styles.itemPrice}>{item.price}</p>
+                        ) : null}
+                      </div>
+                      {item.description ? (
+                        <p className={styles.itemBody}>{item.description}</p>
+                      ) : null}
+                      {item.note ? (
+                        <p className={styles.itemNote}>{item.note}</p>
+                      ) : null}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         ))}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { site } from "../lib/site";
 import styles from "./about-preview.module.css";
@@ -10,6 +11,16 @@ export default function AboutPreview() {
       aria-labelledby="about-preview-title"
     >
       <div className={styles.grid}>
+        <div className={styles.photo}>
+          <Image
+            src={site.banner}
+            alt=""
+            width={800}
+            height={1000}
+            className={styles.photoImg}
+            style={{ width: "100%", height: "auto" }}
+          />
+        </div>
         <div className={styles.panel}>
           <p className={styles.panelEyebrow}>Visit</p>
           <address className={styles.address}>{site.address}</address>

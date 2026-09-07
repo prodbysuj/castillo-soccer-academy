@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { site, navLinks } from "../lib/site";
+import { Logo } from "../logo";
 import { useHydrated } from "../lib/use-hydrated";
 import styles from "./navbar.module.css";
 
@@ -38,8 +39,6 @@ const HOME_SECTIONS = [
   { href: "/", id: "home" },
   { href: "/#about", id: "about" },
 ];
-
-const PILL_SPRING = { type: "spring", stiffness: 420, damping: 34 };
 
 function sectionFromScroll() {
   const offset = 200;
@@ -129,9 +128,7 @@ export default function Navbar() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className={styles.brandInner}
           >
-            <span className={styles.mark} aria-hidden="true">
-              CU
-            </span>
+            <Logo className={styles.mark} size={56} priority />
             <span className={styles.wordmark}>
               <span className={styles.brandTop}>{site.name}</span>
             </span>
@@ -150,24 +147,21 @@ export default function Navbar() {
                 className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
                 aria-current={isActive ? "page" : undefined}
               >
-                {isActive ? (
-                  hydrated ? (
-                    <motion.span
-                      className={styles.pill}
-                      layoutId="nav-pill-desktop"
-                      transition={PILL_SPRING}
-                    />
-                  ) : (
-                    <span className={styles.pill} aria-hidden="true" />
-                  )
-                ) : null}
-                <span className={styles.linkLabel}>{link.label}</span>
+                {link.label}
               </Link>
             );
           })}
         </div>
 
         <div className={styles.tools}>
+          <a
+            href={site.orderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.order}
+          >
+            Order Now
+          </a>
           <a
             href={site.mapsUrl}
             target="_blank"
@@ -231,18 +225,7 @@ export default function Navbar() {
                       className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""}`}
                       aria-current={isActive ? "page" : undefined}
                     >
-                      {isActive ? (
-                        hydrated ? (
-                          <motion.span
-                            className={styles.pill}
-                            layoutId="nav-pill-mobile"
-                            transition={PILL_SPRING}
-                          />
-                        ) : (
-                          <span className={styles.pill} aria-hidden="true" />
-                        )
-                      ) : null}
-                      <span className={styles.linkLabel}>{link.label}</span>
+                      {link.label}
                     </Link>
                   );
                 })}
@@ -251,6 +234,15 @@ export default function Navbar() {
               <div className={styles.mobileDivider} aria-hidden="true" />
 
               <div className={styles.mobileContact}>
+                <a
+                  href={site.orderUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.order}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Order Now
+                </a>
                 <a href={site.phoneHref} className={styles.mobilePhone}>
                   <PhoneIcon />
                   {site.phoneLabel}

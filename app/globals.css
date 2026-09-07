@@ -1,24 +1,36 @@
 :root {
-  --red: #dc2626;
-  --gold: #a16207;
-  --cream: #fef2f2;
-  --ink: #450a0a;
+  --navy: #072f8c;
+  --navy-focus: #1943a2;
+  --navy-deep: #051f5e;
+  --gold: #8c6407;
+  --yellow: #f3d535;
+  --action: #265bd0;
   --paper: #ffffff;
+  --surface: #fbfdff;
+  --surface-2: #f3f9ff;
+  --ink: #202020;
+  --muted: #646464;
+  --line: #cecece;
+
+  --red: var(--navy);
+  --cream: var(--paper);
+  --slate: var(--gold);
 
   --black: var(--ink);
   --white: var(--paper);
   --pink: var(--gold);
 
-  --background: var(--cream);
+  --background: var(--paper);
   --foreground: var(--ink);
-  --surface-inverse: #7f1d1d;
-  --on-inverse: var(--cream);
-  --on-pink: var(--cream);
+  --surface-inverse: var(--navy);
+  --on-inverse: var(--paper);
+  --on-pink: var(--paper);
+  --on-inverse-muted: #c5d6e8;
 
-  --nav-height: 55px;
+  --nav-height: 80px;
 
-  --focus-ring-color: var(--red);
-  --focus-ring-color-inverse: #fde68a;
+  --focus-ring-color: var(--navy);
+  --focus-ring-color-inverse: #b4d3ff;
   --focus-ring-width: 3px;
   --focus-ring-offset: 3px;
 
@@ -31,15 +43,14 @@
   --space-11: 88px;
 
   --radius-sm: 4px;
-  --radius-md: 12px;
+  --radius-md: 16px;
   --radius-pill: 999px;
 
-  --dur-base: 220ms;
+  --dur-base: 200ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  --font-body-stack: var(--font-body), system-ui, -apple-system, "Segoe UI",
-    Arial, sans-serif;
-  --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
+  --font-body-stack: var(--font-body), "Josefin Sans", system-ui, sans-serif;
+  --font-display-stack: var(--font-body), "Josefin Sans", system-ui, sans-serif;
 }
 
 html {
@@ -78,8 +89,8 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display-stack);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 a {
@@ -106,8 +117,8 @@ button {
 }
 
 ::selection {
-  color: var(--cream);
-  background: var(--red);
+  color: var(--paper);
+  background: var(--navy);
 }
 
 @media (forced-colors: active) {

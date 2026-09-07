@@ -1,6 +1,9 @@
 export const site = {
   name: "Curry Up Pizza",
   shortName: "Curry Up",
+  logo: "/curry-up-pizza-logo.png",
+  banner: "/storefront-banner.jpg",
+  orderUrl: "https://curryuppizza.com/menu",
   tagline: "Indian pizza in Yorba Linda — spice, cheese, and a golden crust",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=18111+Imperial+Hwy%2C+Yorba+Linda%2C+CA+92886",

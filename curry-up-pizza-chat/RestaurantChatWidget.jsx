@@ -6,6 +6,7 @@ import styles from "./RestaurantChatWidget.module.css";
 
 const RESTAURANT = {
   name: site.name,
+  logo: site.logo,
   phone: site.phoneLabel,
   phoneHref: site.phoneHref,
   address: site.address,
@@ -722,9 +723,13 @@ export function RestaurantChatWidget() {
           >
             {messages.length === 0 && !typing && (
               <div className={styles.empty}>
-                <span className={styles.emptyMark} aria-hidden="true">
-                  CU
-                </span>
+                <img
+                  className={styles.emptyMark}
+                  src={RESTAURANT.logo}
+                  alt=""
+                  width={56}
+                  height={56}
+                />
                 <p>Ask about the menu, hours, or an order.</p>
               </div>
             )}
@@ -737,9 +742,13 @@ export function RestaurantChatWidget() {
                 }`}
               >
                 {message.role === "bot" ? (
-                  <span className={styles.avatar} aria-hidden="true">
-                    CU
-                  </span>
+                  <img
+                    className={styles.avatar}
+                    src={RESTAURANT.logo}
+                    alt=""
+                    width={28}
+                    height={28}
+                  />
                 ) : null}
                 <div className={styles.stack}>
                   <div
@@ -761,9 +770,13 @@ export function RestaurantChatWidget() {
 
             {typing && (
               <div className={`${styles.row} ${styles.rowBot}`} aria-label="Assistant is typing">
-                <span className={styles.avatar} aria-hidden="true">
-                  CU
-                </span>
+                <img
+                  className={styles.avatar}
+                  src={RESTAURANT.logo}
+                  alt=""
+                  width={28}
+                  height={28}
+                />
                 <div className={styles.stack}>
                   <div className={`${styles.bubble} ${styles.bubbleBot} ${styles.typing}`}>
                     <span />

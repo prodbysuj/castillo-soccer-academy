@@ -1,130 +1,76 @@
-"use client";
-
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { site } from "../lib/site";
-import { useHydrated } from "../lib/use-hydrated";
+import { featuredCategories } from "../lib/menu";
+import { featuredImages } from "../lib/menu-images";
+import { Logo } from "../logo";
 import styles from "./hero.module.css";
 
-const TICKER = [
-  "Butter Chicken",
-  "Butter Paneer",
-  "Tandoori",
-  "Jain",
-  "Vegan",
-  "Halal",
-  "Samosa",
-  "Pani Puri",
-  "Wings",
-  "Pasta",
-  "Margherita",
-  "Craft Your Own",
-];
-
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.13, delayChildren: 0.15 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 28 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const badge = {
-  hidden: { opacity: 0, scale: 0.6 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function Hero() {
-  const hydrated = useHydrated();
-  const [offscreen, setOffscreen] = useState(false);
-  const viewportRef = useRef(null);
-
-  useEffect(() => {
-    const node = viewportRef.current;
-    if (!node || typeof IntersectionObserver === "undefined") return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setOffscreen(!entry.isIntersecting),
-      { rootMargin: "150px" }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const copies = [...TICKER, ...TICKER];
-
   return (
     <section id="home" className={styles.hero} aria-labelledby="hero-title">
-      <motion.div
-        className={styles.stage}
-        variants={container}
-        initial="hidden"
-        animate={hydrated ? "show" : "hidden"}
-      >
-        <motion.div className={styles.badge} variants={badge}>
-          <span className={styles.ring} aria-hidden="true">
-            CU
-          </span>
-        </motion.div>
-
-        <motion.h1 id="hero-title" className={styles.title} variants={item}>
-          <span className={styles.titleTop}>Indian pizza</span>
-          <span className={styles.titleBottom}>Curry Up Pizza</span>
-        </motion.h1>
-
-        <motion.p className={styles.tagline} variants={item}>
-          {site.tagline}
-        </motion.p>
-
-        <motion.div className={styles.actions} variants={item}>
-          <Link href="/menu" className={styles.primary}>
-            View the menu
-          </Link>
-          <a href={site.phoneHref} className={styles.secondary}>
-            Call {site.phoneLabel}
+      <div className={styles.stage}>
+        <Logo className={styles.logo} size={88} alt="" priority />
+        <h1 id="hero-title" className={styles.title}>
+          {site.name}
+        </h1>
+        <p className={styles.address}>{site.address}</p>
+        <div className={styles.actions}>
+          <a
+            href={site.orderUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.primary}
+          >
+            Order Now
           </a>
-        </motion.div>
+          <Link href="/menu" className={styles.secondary}>
+            View Menu
+          </Link>
+        </div>
+      </div>
 
-        <motion.div
-          className={styles.strip}
-          variants={item}
-          role="group"
-          aria-label="Menu highlights"
-        >
-          <div className={styles.viewport} ref={viewportRef}>
-            <div
-              className={`${styles.track} ${offscreen ? styles.trackPaused : ""}`}
+      <div
+        id="menu-preview"
+        className={styles.gallery}
+        role="navigation"
+        aria-label="Menu highlights"
+      >
+        {featuredCategories.map((category, index) => {
+          const image = featuredImages[category.id];
+          const highlight = category.points[0];
+
+          return (
+            <Link
+              key={category.id}
+              href={category.href}
+              className={`${styles.tile} ${index === 0 ? styles.tileFeature : ""}`}
             >
-              {copies.map((label, index) => {
-                const isDuplicate = index >= TICKER.length;
-
-                return (
-                  <div
-                    key={`${label}-${index}`}
-                    className={styles.card}
-                    aria-hidden={isDuplicate ? "true" : undefined}
-                  >
-                    {label}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
+              {image ? (
+                <Image
+                  src={image}
+                  alt=""
+                  fill
+                  sizes={
+                    index === 0
+                      ? "(max-width: 799px) 100vw, 46vw"
+                      : "(max-width: 799px) 50vw, 28vw"
+                  }
+                  className={styles.tilePhoto}
+                  priority={index === 0}
+                />
+              ) : null}
+              <span className={styles.tileShade} aria-hidden="true" />
+              <span className={styles.tileCopy}>
+                <span className={styles.tileName}>{category.name}</span>
+                {highlight ? (
+                  <span className={styles.tileHint}>{highlight}</span>
+                ) : null}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
     </section>
   );
 }
