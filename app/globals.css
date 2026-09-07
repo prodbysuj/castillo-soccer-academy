@@ -1,24 +1,24 @@
 :root {
-  /* Brand guide: black, white, and flamingo pink. Black and white carry
-     surfaces, type, and controls. Pink is the least-used of the three —
-     thin rings, small labels, hairlines — matching how the crest uses it. */
-  --black: #000000;
-  --white: #ffffff;
-  /* 12.5:1 on black, 1.7:1 on white. Pink therefore only sits on black, or
-     as a fill that carries black content. Never pink-on-white text. */
-  --pink: #f7b6ce;
+  --red: #dc2626;
+  --gold: #a16207;
+  --cream: #fef2f2;
+  --ink: #450a0a;
+  --paper: #ffffff;
 
-  --background: var(--white);
-  --foreground: var(--black);
-  --surface-inverse: var(--black);
-  --on-inverse: var(--white);
-  --on-pink: var(--black);
+  --black: var(--ink);
+  --white: var(--paper);
+  --pink: var(--gold);
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --surface-inverse: #7f1d1d;
+  --on-inverse: var(--cream);
+  --on-pink: var(--cream);
 
   --nav-height: 55px;
 
-  /* Consumers override --focus-ring-color on dark surfaces. */
-  --focus-ring-color: var(--black);
-  --focus-ring-color-inverse: var(--pink);
+  --focus-ring-color: var(--red);
+  --focus-ring-color-inverse: #fde68a;
   --focus-ring-width: 3px;
   --focus-ring-offset: 3px;
 
@@ -39,8 +39,7 @@
 
   --font-body-stack: var(--font-body), system-ui, -apple-system, "Segoe UI",
     Arial, sans-serif;
-  --font-display-stack: var(--font-display), "Arial Narrow Bold", "Arial Narrow",
-    Impact, sans-serif;
+  --font-display-stack: var(--font-display), Georgia, "Times New Roman", serif;
 }
 
 html {
@@ -53,8 +52,6 @@ html {
 html,
 body {
   max-width: 100vw;
-  /* clip instead of hidden: does not create a scroll container, so the
-     sticky navbar and scroll-padding-top keep working. */
   overflow-x: clip;
 }
 
@@ -81,8 +78,8 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display-stack);
-  font-weight: 400;
-  letter-spacing: 0.015em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 a {
@@ -109,8 +106,8 @@ button {
 }
 
 ::selection {
-  color: var(--on-pink);
-  background: var(--pink);
+  color: var(--cream);
+  background: var(--red);
 }
 
 @media (prefers-reduced-motion: reduce) {

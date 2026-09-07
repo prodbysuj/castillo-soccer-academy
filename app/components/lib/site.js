@@ -1,18 +1,22 @@
 export const site = {
-  name: "Profe Castillo’s Youth Soccer Academy",
-  shortName: "Profe Castillo",
-  fullName: "Walter Castillo",
-  tagline: "Where every player grows in skill, strength, and honor",
+  name: "Curry Up Pizza",
+  shortName: "Curry Up",
+  tagline: "Indian pizza in Yorba Linda — spice, cheese, and a golden crust",
   mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=1435+N+Orizaba+Ave%2C+Long+Beach%2C+CA+90804",
-  phoneHref: "tel:+15623317377",
-  phoneLabel: "(562) 331-7377",
-  address: "1435 N Orizaba Ave, Long Beach, CA 90804",
+    "https://www.google.com/maps/search/?api=1&query=18111+Imperial+Hwy%2C+Yorba+Linda%2C+CA+92886",
+  phoneHref: "tel:+17143120777",
+  phoneLabel: "(714) 312-0777",
+  address: "18111 Imperial Hwy, Yorba Linda, CA 92886",
+  hours: [
+    { days: "Sunday–Thursday", time: "10:30 AM–9:00 PM" },
+    { days: "Friday–Saturday", time: "10:30 AM–10:00 PM" },
+  ],
+  hoursNote: "Holiday hours may differ.",
 };
 
 export const navLinks = [
-  { key: "home", href: "/" },
-  { key: "programs", href: "/#programs" },
-  { key: "about", href: "/#about" },
-  { key: "contact", href: "/contact" },
+  { href: "/", label: "Home" },
+  { href: "/menu", label: "Menu" },
+  { href: "/#about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ];

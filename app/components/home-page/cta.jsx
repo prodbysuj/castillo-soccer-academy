@@ -1,8 +1,4 @@
-"use client";
-
 import { site } from "../lib/site";
-import { fill } from "../lib/i18n";
-import { useLanguage } from "../language-provider";
 import styles from "./cta.module.css";
 
 function PhoneIcon() {
@@ -32,19 +28,18 @@ function MapPinIcon() {
 }
 
 export default function Cta() {
-  const { copy } = useLanguage();
-
   return (
     <section className={styles.cta} aria-labelledby="cta-heading">
       <div className={styles.inner}>
-        <p className={styles.eyebrow}>{copy.cta.eyebrow}</p>
+        <p className={styles.eyebrow}>Order or stop in</p>
 
         <h2 id="cta-heading" className={styles.title}>
-          {copy.cta.title}
+          Hungry? Call Curry Up Pizza
         </h2>
 
         <p className={styles.body}>
-          {fill(copy.cta.body, { name: site.shortName })}
+          {site.hours[0].days} {site.hours[0].time}. {site.hours[1].days}{" "}
+          {site.hours[1].time}. {site.hoursNote}
         </p>
 
         <div className={styles.actions}>
@@ -60,7 +55,7 @@ export default function Cta() {
             className={styles.secondary}
           >
             <MapPinIcon />
-            {copy.cta.directions}
+            Get directions
           </a>
         </div>
 

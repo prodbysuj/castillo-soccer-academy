@@ -5,9 +5,9 @@
   width: 100%;
   /* Opaque: translucency plus blur would pick up whatever scrolls under it
      and read as grey. */
-  background: var(--white);
-  color: var(--black);
-  border-bottom: 1px solid var(--black);
+  background: var(--cream);
+  color: var(--ink);
+  border-bottom: 1px solid #fecaca;
 }
 
 .bar {
@@ -33,26 +33,20 @@
   gap: 12px;
 }
 
-/* Black disc with a 1px pink ring, matching the crest on a white field. */
 .mark {
   display: grid;
   place-items: center;
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  border: 1px solid var(--pink);
+  border: 1px solid var(--gold);
   border-radius: 50%;
-  background: var(--black);
-}
-
-/* Painted through a mask so the logo takes the brand pink instead of being
-   locked to the SVG's own near-black fill. */
-.markBall {
-  width: 20px;
-  height: 20px;
-  background-color: var(--pink);
-  -webkit-mask: url("/Football.svg") center / contain no-repeat;
-  mask: url("/Football.svg") center / contain no-repeat;
+  background: var(--red);
+  color: var(--cream);
+  font-family: var(--font-display-stack);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .wordmark {
@@ -64,8 +58,8 @@
 .brandTop {
   font-family: var(--font-display-stack);
   font-size: 20px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .desktopLinks {
@@ -100,7 +94,7 @@
 }
 
 .linkActiveStatic {
-  background: var(--black);
+  background: var(--red);
 }
 
 .pill {
@@ -108,7 +102,7 @@
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  background: var(--black);
+  background: var(--red);
 }
 
 .linkLabel {
@@ -120,39 +114,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.lang {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  min-height: 44px;
-  padding: 4px;
-  border: 1px solid var(--black);
-  border-radius: var(--radius-pill);
-}
-
-.langBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  min-height: 28px;
-  padding: 0 8px;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: transparent;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  transition: background-color var(--dur-base) var(--ease-out),
-    color var(--dur-base) var(--ease-out);
-}
-
-.langBtnActive {
-  background: var(--black);
-  color: var(--white);
 }
 
 .mapLink {
@@ -252,7 +213,7 @@
 }
 
 .mobileLinkActiveStatic {
-  background: var(--black);
+  background: var(--red);
 }
 
 .mobileDivider {

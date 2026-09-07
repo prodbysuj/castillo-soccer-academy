@@ -2,7 +2,7 @@
   padding: var(--space-11) var(--space-3);
   background: var(--background);
   color: var(--foreground);
-  border-top: 1px solid var(--black);
+  border-top: 1px solid #fecaca;
   scroll-margin-top: var(--nav-height);
 }
 
@@ -12,7 +12,7 @@
 }
 
 .header {
-  max-width: 28em;
+  max-width: 32em;
   margin: 0 auto;
   text-align: center;
 }
@@ -22,13 +22,13 @@
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
+  color: var(--red);
 }
 
 .title {
   margin-top: var(--space-2);
   font-size: clamp(2.5rem, 7vw, 4.25rem);
   line-height: 0.95;
-  letter-spacing: 0.015em;
 }
 
 .body {
@@ -49,43 +49,21 @@
   flex-direction: column;
   align-items: flex-start;
   padding: var(--space-4);
-  border: 1px solid var(--black);
-  background: var(--white);
-  color: var(--black);
+  border: 1px solid #fecaca;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .cardInverse {
   --focus-ring-color: var(--focus-ring-color-inverse);
-  background: var(--black);
-  color: var(--white);
-  border-color: var(--pink);
-}
-
-.icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-}
-
-.cardInverse .icon {
-  border-color: var(--pink);
-  color: var(--pink);
-}
-
-.icon svg {
-  width: 22px;
-  height: 22px;
+  background: var(--surface-inverse);
+  color: var(--on-inverse);
+  border-color: var(--gold);
 }
 
 .cardTitle {
-  margin-top: var(--space-3);
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   line-height: 0.95;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
 }
 
 .cardBody {
@@ -125,7 +103,7 @@
 }
 
 .cardInverse .points li::before {
-  background: var(--pink);
+  background: var(--gold);
 }
 
 .cardLink {
@@ -146,26 +124,26 @@
 }
 
 .card:not(.cardInverse) .cardLink {
-  background: var(--black);
-  color: var(--white);
-  border-color: var(--black);
+  background: var(--red);
+  color: var(--cream);
+  border-color: var(--red);
 }
 
 .cardInverse .cardLink {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
+  background: var(--cream);
+  color: var(--ink);
+  border-color: var(--cream);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .card:not(.cardInverse) .cardLink:hover {
-    background: var(--white);
-    color: var(--black);
+    background: var(--ink);
+    border-color: var(--ink);
   }
 
   .cardInverse .cardLink:hover {
     background: transparent;
-    color: var(--white);
+    color: var(--cream);
   }
 }
 

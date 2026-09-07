@@ -1,0 +1,191 @@
+.hero {
+  padding: var(--space-8) var(--space-3) var(--space-4);
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.title {
+  margin-top: var(--space-2);
+  font-size: clamp(2.75rem, 8vw, 4.75rem);
+  line-height: 0.95;
+}
+
+.lead {
+  max-width: 40em;
+  margin: var(--space-3) auto 0;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--space-3) var(--space-4);
+}
+
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .jump a:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--cream);
+  }
+}
+
+.prices,
+.section {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-3);
+  border-top: 1px solid #fecaca;
+  scroll-margin-top: var(--nav-height);
+}
+
+.pricesTitle,
+.sectionTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1;
+}
+
+.priceGrid {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.tableWrap {
+  padding: var(--space-3);
+  border: 1px solid #fecaca;
+  background: var(--paper);
+}
+
+.tableTitle {
+  font-size: 1.5rem;
+}
+
+.table {
+  width: 100%;
+  margin-top: var(--space-2);
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.table th,
+.table td {
+  padding: 10px 0;
+  text-align: left;
+  border-bottom: 1px solid #fecaca;
+}
+
+.table th {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.table td:last-child,
+.table th:last-child {
+  text-align: right;
+  font-weight: 700;
+}
+
+.intro {
+  max-width: 40em;
+  margin-top: var(--space-2);
+  line-height: 1.65;
+}
+
+.items {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid #fecaca;
+}
+
+.itemHead {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.itemName {
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.itemPrice {
+  flex-shrink: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.itemBody {
+  margin-top: 6px;
+  line-height: 1.6;
+}
+
+.itemNote {
+  margin-top: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--red);
+}
+
+.disclaimer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--space-3) var(--space-8);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 800px) {
+  .hero {
+    padding-top: var(--space-11);
+  }
+
+  .priceGrid,
+  .items {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 799px) {
+  .hero,
+  .prices,
+  .section {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+  }
+}

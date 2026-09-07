@@ -1,17 +1,15 @@
-import { Bebas_Neue, Source_Sans_3 } from "next/font/google";
+import { Playfair_Display, Karla } from "next/font/google";
 import MotionProvider from "./components/motion-provider";
-import { LanguageProvider } from "./components/language-provider";
 import { site } from "./components/lib/site";
 import "./globals.css";
 
-const bebasNeue = Bebas_Neue({
+const playfair = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: "400",
   display: "swap",
 });
 
-const sourceSans = Source_Sans_3({
+const karla = Karla({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
@@ -24,14 +22,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${bebasNeue.variable} ${sourceSans.variable}`}
-    >
+    <html lang="en" className={`${playfair.variable} ${karla.variable}`}>
       <body>
-        <MotionProvider>
-          <LanguageProvider>{children}</LanguageProvider>
-        </MotionProvider>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );

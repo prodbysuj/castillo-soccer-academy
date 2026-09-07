@@ -2,25 +2,20 @@
 
 import { useRef, useState } from "react";
 import { site } from "../lib/site";
-import { fill } from "../lib/i18n";
-import { useLanguage } from "../language-provider";
 import styles from "./contact-form.module.css";
 
-const AGE_VALUES = ["6-8", "9-11", "12-14", "15-18", "unsure"];
-
-const CONTACT_VALUES = [
-  { value: "call", labelKey: "call" },
-  { value: "text", labelKey: "text" },
-  { value: "email", labelKey: "emailOpt" },
+const TOPICS = [
+  { value: "question", label: "Menu question" },
+  { value: "order", label: "Order / pickup" },
+  { value: "group", label: "Group or catering" },
+  { value: "other", label: "Something else" },
 ];
 
 const EMPTY = {
-  parentName: "",
+  name: "",
   phone: "",
   email: "",
-  playerName: "",
-  playerAge: "",
-  preferredContact: "call",
+  topic: "question",
   note: "",
   website: "",
 };
@@ -36,43 +31,28 @@ function isPhone(value) {
 function fieldErrors(values) {
   const errors = {};
 
-  if (!values.parentName.trim()) {
-    errors.parentName = "nameRequired";
+  if (!values.name.trim()) {
+    errors.name = "Please enter your name.";
   }
 
   if (!values.phone.trim()) {
-    errors.phone = "phoneRequired";
+    errors.phone = "Please enter a phone number.";
   } else if (!isPhone(values.phone)) {
-    errors.phone = "phoneInvalid";
+    errors.phone = "Enter a phone number with at least 10 digits.";
   }
 
   if (!values.email.trim()) {
-    errors.email = "emailRequired";
+    errors.email = "Please enter an email address.";
   } else if (!isEmail(values.email.trim())) {
-    errors.email = "emailInvalid";
-  }
-
-  if (!values.playerName.trim()) {
-    errors.playerName = "playerRequired";
-  }
-
-  if (!values.playerAge) {
-    errors.playerAge = "ageRequired";
+    errors.email = "Enter a valid email address.";
   }
 
   return errors;
 }
 
-const FIELD_ORDER = [
-  "parentName",
-  "phone",
-  "email",
-  "playerName",
-  "playerAge",
-];
+const FIELD_ORDER = ["name", "phone", "email"];
 
 export default function ContactForm({ framed = true }) {
-  const { copy } = useLanguage();
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -113,7 +93,6 @@ export default function ContactForm({ framed = true }) {
 
   const errorList = FIELD_ORDER.filter((name) => errors[name]);
   const sectionClass = `${styles.section} ${framed ? "" : styles.flush}`.trim();
-  const errorText = copy.form.errors;
 
   if (submitted) {
     return (
@@ -124,19 +103,15 @@ export default function ContactForm({ framed = true }) {
       >
         <div className={styles.inner}>
           <div className={styles.success} role="status">
-            <p className={styles.eyebrow}>{copy.form.successEyebrow}</p>
+            <p className={styles.eyebrow}>Message saved</p>
             <h2 id="contact-title" className={styles.title}>
-              {copy.form.successTitle}
+              Thanks — we’ll take it from here
             </h2>
             <p className={styles.lead}>
-              {fill(copy.form.successLead, {
-                name: site.shortName,
-                player: values.playerName.trim() || copy.form.yourPlayer,
-                phone: site.phoneLabel,
-              })}
+              For a faster answer, call {site.name} at {site.phoneLabel}.
             </p>
             <a href={site.phoneHref} className={styles.submit}>
-              {fill(copy.form.callCta, { phone: site.phoneLabel })}
+              Call {site.phoneLabel}
             </a>
           </div>
         </div>
@@ -148,11 +123,14 @@ export default function ContactForm({ framed = true }) {
     <section id="contact" className={sectionClass} aria-labelledby="contact-title">
       <div className={styles.inner}>
         <header className={styles.intro}>
-          <p className={styles.eyebrow}>{copy.form.eyebrow}</p>
+          <p className={styles.eyebrow}>Contact</p>
           <h2 id="contact-title" className={styles.title}>
-            {copy.form.title}
+            Ask Curry Up Pizza
           </h2>
-          <p className={styles.lead}>{copy.form.lead}</p>
+          <p className={styles.lead}>
+            Questions about the menu, an order, or a group? Leave a note, or
+            call the restaurant.
+          </p>
         </header>
 
         <form className={styles.form} onSubmit={handleSubmit} noValidate>
@@ -165,12 +143,12 @@ export default function ContactForm({ framed = true }) {
               aria-labelledby="contact-error-title"
             >
               <p id="contact-error-title" className={styles.summaryTitle}>
-                {copy.form.summaryTitle}
+                Please fix the following
               </p>
               <ul className={styles.summaryList}>
                 {errorList.map((name) => (
                   <li key={name}>
-                    <a href={`#${name}`}>{errorText[errors[name]]}</a>
+                    <a href={`#${name}`}>{errors[name]}</a>
                   </li>
                 ))}
               </ul>
@@ -179,24 +157,24 @@ export default function ContactForm({ framed = true }) {
 
           <div className={styles.grid}>
             <Field
-              id="parentName"
-              label={copy.form.parentName}
+              id="name"
+              label="Name"
               autoComplete="name"
-              value={values.parentName}
-              error={errorText[errors.parentName]}
-              onChange={(value) => update("parentName", value)}
-              onBlur={() => validateField("parentName")}
+              value={values.name}
+              error={errors.name}
+              onChange={(value) => update("name", value)}
+              onBlur={() => validateField("name")}
             />
 
             <Field
               id="phone"
-              label={copy.form.phone}
+              label="Phone"
               type="tel"
               autoComplete="tel"
               inputMode="tel"
               value={values.phone}
-              error={errorText[errors.phone]}
-              hint={copy.form.phoneHint}
+              error={errors.phone}
+              hint="Include the area code."
               onChange={(value) => update("phone", value)}
               onBlur={() => validateField("phone")}
             />
@@ -204,66 +182,29 @@ export default function ContactForm({ framed = true }) {
             <Field
               id="email"
               className={styles.span}
-              label={copy.form.email}
+              label="Email"
               type="email"
               autoComplete="email"
               value={values.email}
-              error={errorText[errors.email]}
+              error={errors.email}
               onChange={(value) => update("email", value)}
               onBlur={() => validateField("email")}
             />
-
-            <Field
-              id="playerName"
-              label={copy.form.playerName}
-              autoComplete="off"
-              value={values.playerName}
-              error={errorText[errors.playerName]}
-              onChange={(value) => update("playerName", value)}
-              onBlur={() => validateField("playerName")}
-            />
-
-            <div className={styles.field}>
-              <label htmlFor="playerAge" className={styles.label}>
-                {copy.form.playerAge}
-              </label>
-              <select
-                id="playerAge"
-                className={`${styles.input} ${errors.playerAge ? styles.invalid : ""}`}
-                value={values.playerAge}
-                aria-invalid={errors.playerAge ? "true" : undefined}
-                aria-describedby={errors.playerAge ? "playerAge-error" : undefined}
-                onChange={(event) => update("playerAge", event.target.value)}
-                onBlur={() => validateField("playerAge")}
-              >
-                <option value="">{copy.form.chooseAge}</option>
-                {AGE_VALUES.map((value) => (
-                  <option key={value} value={value}>
-                    {copy.form.ages[value]}
-                  </option>
-                ))}
-              </select>
-              {errors.playerAge && (
-                <p id="playerAge-error" className={styles.error}>
-                  {errorText[errors.playerAge]}
-                </p>
-              )}
-            </div>
           </div>
 
           <fieldset className={styles.fieldset}>
-            <legend className={styles.label}>{copy.form.preferred}</legend>
+            <legend className={styles.label}>What is this about?</legend>
             <div className={styles.pills}>
-              {CONTACT_VALUES.map((option) => (
+              {TOPICS.map((option) => (
                 <label key={option.value} className={styles.pill}>
                   <input
                     type="radio"
-                    name="preferredContact"
+                    name="topic"
                     value={option.value}
-                    checked={values.preferredContact === option.value}
-                    onChange={() => update("preferredContact", option.value)}
+                    checked={values.topic === option.value}
+                    onChange={() => update("topic", option.value)}
                   />
-                  {copy.form[option.labelKey]}
+                  {option.label}
                 </label>
               ))}
             </div>
@@ -271,8 +212,7 @@ export default function ContactForm({ framed = true }) {
 
           <div className={`${styles.field} ${styles.span}`}>
             <label htmlFor="note" className={styles.label}>
-              {copy.form.note}{" "}
-              <span className={styles.optional}>{copy.form.optional}</span>
+              Note <span className={styles.optional}>(optional)</span>
             </label>
             <textarea
               id="note"
@@ -285,7 +225,7 @@ export default function ContactForm({ framed = true }) {
           </div>
 
           <div className={styles.honeypot} aria-hidden="true">
-            <label htmlFor="website">{copy.form.website}</label>
+            <label htmlFor="website">Website</label>
             <input
               id="website"
               tabIndex={-1}
@@ -296,11 +236,11 @@ export default function ContactForm({ framed = true }) {
           </div>
 
           <button type="submit" className={styles.submit}>
-            {fill(copy.form.submit, { name: site.shortName })}
+            Send to {site.shortName}
           </button>
 
           <p className={styles.aside}>
-            {copy.form.orCall}{" "}
+            Or call{" "}
             <a href={site.phoneHref} className={styles.phone}>
               {site.phoneLabel}
             </a>
