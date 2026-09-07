@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { site } from "../lib/site";
 import styles from "./about-preview.module.css";
 
@@ -10,20 +9,42 @@ export default function AboutPreview() {
       className={styles.section}
       aria-labelledby="about-preview-title"
     >
-      <div className={styles.grid}>
+      <div className={styles.inner}>
         <div className={styles.photo}>
           <Image
             src={site.banner}
             alt=""
-            width={800}
-            height={1000}
+            width={1400}
+            height={900}
             className={styles.photoImg}
-            style={{ width: "100%", height: "auto" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            sizes="(max-width: 799px) 100vw, 55vw"
           />
         </div>
-        <div className={styles.panel}>
-          <p className={styles.panelEyebrow}>Visit</p>
-          <address className={styles.address}>{site.address}</address>
+
+        <div className={styles.copy}>
+          <h2 id="about-preview-title" className={styles.title}>
+            Visit
+          </h2>
+          <p className={styles.blurb}>
+            Indian pizza in Yorba Linda — butter sauce, curry, tikka, and
+            tandoori, plus Jain, vegan, and Halal options.
+          </p>
+
+          <address className={styles.details}>
+            <a
+              href={site.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.line}
+            >
+              {site.address}
+            </a>
+            <a href={site.phoneHref} className={styles.line}>
+              {site.phoneLabel}
+            </a>
+          </address>
+
           <ul className={styles.hours}>
             {site.hours.map((row) => (
               <li key={row.days}>
@@ -32,34 +53,7 @@ export default function AboutPreview() {
               </li>
             ))}
           </ul>
-          <p className={styles.hoursNote}>{site.hoursNote}</p>
-        </div>
-
-        <div className={styles.copy}>
-          <p className={styles.eyebrow}>About</p>
-          <h2 id="about-preview-title" className={styles.title}>
-            {site.name}
-          </h2>
-          <div className={styles.body}>
-            <p>
-              Curry Up Pizza is an Indian pizza restaurant in Yorba Linda.
-              The kitchen builds pies with butter sauce, curry, tikka,
-              tandoori, and the usual red, garlic, BBQ, and pesto bases.
-            </p>
-            <p>
-              The menu also has Jain pizzas without onion or garlic, vegan
-              pizzas on a 12&quot; gluten-free crust, a Halal menu, wings,
-              pasta, samosas, and pani puri.
-            </p>
-            <p>
-              For allergens or a serious dietary need, call the restaurant.
-              We do not treat this site as a medical or allergen-free
-              guarantee.
-            </p>
-          </div>
-          <Link href="/menu" className={styles.link}>
-            Read the full menu
-          </Link>
+          <p className={styles.note}>{site.hoursNote}</p>
         </div>
       </div>
     </section>

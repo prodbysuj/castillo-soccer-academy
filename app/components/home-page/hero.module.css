@@ -1,16 +1,17 @@
 .hero {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: var(--space-6) var(--space-3) var(--space-8);
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-6) var(--space-2) var(--space-6);
 }
 
 .stage {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
   text-align: center;
 }
 
@@ -21,7 +22,7 @@
 
 .title {
   margin-top: var(--space-3);
-  font-size: clamp(2.25rem, 6vw, 3.75rem);
+  font-size: clamp(2.25rem, 8vw, 3.75rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
 }
@@ -38,6 +39,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
+  width: 100%;
   margin-top: var(--space-3);
 }
 
@@ -47,6 +49,7 @@
   align-items: center;
   justify-content: center;
   min-height: 48px;
+  min-width: 148px;
   padding: 0 var(--space-3);
   border-radius: var(--radius-pill);
   font-size: 15px;
@@ -71,28 +74,27 @@
 
 .gallery {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: minmax(160px, 28vw) minmax(160px, 28vw);
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  width: 100%;
 }
 
 .tile {
   position: relative;
+  isolation: isolate;
   display: block;
   overflow: hidden;
-  min-height: 160px;
+  aspect-ratio: 1;
+  min-height: 0;
   cursor: pointer;
   background: var(--navy-deep);
   color: var(--paper);
 }
 
-.tileFeature {
-  grid-column: 1 / -1;
-}
-
 .tilePhoto {
   position: absolute;
   inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -102,10 +104,11 @@
 .tileShade {
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
-    rgb(5 31 94 / 0%) 38%,
-    rgb(5 31 94 / 72%) 100%
+    rgb(5 31 94 / 8%) 30%,
+    rgb(5 31 94 / 78%) 100%
   );
 }
 
@@ -114,22 +117,23 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-  padding: 18px 16px 16px;
+  padding: 14px 12px 12px;
 }
 
 .tileName {
-  font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+  font-size: clamp(1rem, 3.4vw, 1.5rem);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.05;
   text-wrap: balance;
 }
 
 .tileHint {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   color: #f3d535;
@@ -146,47 +150,69 @@
   }
 
   .tile:hover .tilePhoto {
-    transform: scale(1.06);
+    transform: scale(1.05);
   }
 }
 
-@media (min-width: 800px) {
-  .hero {
-    gap: var(--space-8);
-    padding: var(--space-8) var(--space-3) var(--space-11);
+@media (max-width: 599px) {
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .gallery {
-    grid-template-columns: 1.35fr 1fr 1fr;
-    grid-template-rows: minmax(210px, 32vh) minmax(210px, 32vh);
-    gap: 12px;
-  }
-
-  .tileFeature {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-  }
-
-  .tileCopy {
-    padding: 24px 22px 20px;
-  }
-}
-
-@media (max-width: 700px) {
-  .hero {
-    gap: var(--space-4);
-    padding: var(--space-5) var(--space-2) var(--space-6);
+  .primary,
+  .secondary {
+    min-width: 0;
+    width: 100%;
   }
 
   .logo {
     width: 64px;
     height: 64px;
   }
+}
 
-  .actions {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
+@media (min-width: 700px) {
+  .hero {
+    gap: var(--space-6);
+    padding: var(--space-8) var(--space-3) var(--space-8);
+  }
+
+  .gallery {
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .tile {
+    aspect-ratio: 5 / 4;
+  }
+
+  .tileCopy {
+    padding: 20px 18px 16px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .tile {
+    aspect-ratio: 4 / 5;
+    min-height: 360px;
+  }
+
+  .tileCopy {
+    padding: 24px 20px 20px;
+  }
+
+  .tileName {
+    font-size: 1.5rem;
+  }
+
+  .tileHint {
+    font-size: 0.8125rem;
   }
 }
 
