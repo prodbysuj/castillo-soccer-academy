@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { site } from "../lib/site";
+import { useHydrated } from "../lib/use-hydrated";
 import styles from "./hero.module.css";
 
 const TICKER = [
@@ -47,6 +48,7 @@ const badge = {
 };
 
 export default function Hero() {
+  const hydrated = useHydrated();
   const [offscreen, setOffscreen] = useState(false);
   const viewportRef = useRef(null);
 
@@ -70,7 +72,7 @@ export default function Hero() {
         className={styles.stage}
         variants={container}
         initial="hidden"
-        animate="show"
+        animate={hydrated ? "show" : "hidden"}
       >
         <motion.div className={styles.badge} variants={badge}>
           <span className={styles.ring} aria-hidden="true">

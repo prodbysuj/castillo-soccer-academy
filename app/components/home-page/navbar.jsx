@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { site, navLinks } from "../lib/site";
+import { useHydrated } from "../lib/use-hydrated";
 import styles from "./navbar.module.css";
 
 function MapPinIcon() {
@@ -40,12 +41,6 @@ const HOME_SECTIONS = [
 
 const PILL_SPRING = { type: "spring", stiffness: 420, damping: 34 };
 
-function hrefFromHash(hash) {
-  if (!hash) return "/";
-  const match = HOME_SECTIONS.find((section) => section.href.endsWith(hash));
-  return match?.href ?? "/";
-}
-
 function sectionFromScroll() {
   const offset = 200;
   let href = "/";
@@ -66,7 +61,7 @@ export default function Navbar() {
   const [homeHref, setHomeHref] = useState("/");
   const pathname = usePathname();
   const toggleRef = useRef(null);
-  const reduceMotion = useReducedMotion();
+  const hydrated = useHydrated();
   const activeHref = pathname === "/" ? homeHref : pathname;
 
   useEffect(() => {
@@ -130,7 +125,7 @@ export default function Navbar() {
         >
           <motion.div
             initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={hydrated ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
             className={styles.brandInner}
           >
@@ -152,17 +147,19 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className={`${styles.link} ${isActive ? styles.linkActive : ""} ${
-                  isActive && reduceMotion ? styles.linkActiveStatic : ""
-                }`}
+                className={`${styles.link} ${isActive ? styles.linkActive : ""}`}
                 aria-current={isActive ? "page" : undefined}
               >
-                {isActive && !reduceMotion ? (
-                  <motion.span
-                    className={styles.pill}
-                    layoutId="nav-pill-desktop"
-                    transition={PILL_SPRING}
-                  />
+                {isActive ? (
+                  hydrated ? (
+                    <motion.span
+                      className={styles.pill}
+                      layoutId="nav-pill-desktop"
+                      transition={PILL_SPRING}
+                    />
+                  ) : (
+                    <span className={styles.pill} aria-hidden="true" />
+                  )
                 ) : null}
                 <span className={styles.linkLabel}>{link.label}</span>
               </Link>
@@ -231,17 +228,19 @@ export default function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={() => handleNavClick(link.href)}
-                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""} ${
-                        isActive && reduceMotion ? styles.mobileLinkActiveStatic : ""
-                      }`}
+                      className={`${styles.mobileLink} ${isActive ? styles.mobileLinkActive : ""}`}
                       aria-current={isActive ? "page" : undefined}
                     >
-                      {isActive && !reduceMotion ? (
-                        <motion.span
-                          className={styles.pill}
-                          layoutId="nav-pill-mobile"
-                          transition={PILL_SPRING}
-                        />
+                      {isActive ? (
+                        hydrated ? (
+                          <motion.span
+                            className={styles.pill}
+                            layoutId="nav-pill-mobile"
+                            transition={PILL_SPRING}
+                          />
+                        ) : (
+                          <span className={styles.pill} aria-hidden="true" />
+                        )
                       ) : null}
                       <span className={styles.linkLabel}>{link.label}</span>
                     </Link>
