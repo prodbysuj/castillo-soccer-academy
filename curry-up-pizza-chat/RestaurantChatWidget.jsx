@@ -473,7 +473,7 @@ export function RestaurantChatWidget() {
   const sendingRef = useRef(false);
 
   function scrollToBottom() {
-    const node = panelRef.current;
+    const node = listRef.current;
     if (!node) return;
     node.scrollTo({ top: node.scrollHeight, behavior: "smooth" });
   }
@@ -663,7 +663,7 @@ export function RestaurantChatWidget() {
   }
 
   return (
-    <div className={`${styles.root} ${expanded ? styles.expanded : ""}`}>
+    <div className={`${styles.root} ${open && expanded ? styles.expanded : ""}`}>
       {open && expanded ? (
         <button
           type="button"
@@ -682,6 +682,12 @@ export function RestaurantChatWidget() {
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
+          onWheel={(event) => {
+            if (event.target.closest("textarea")) return;
+            const thread = listRef.current;
+            if (!thread || thread.contains(event.target)) return;
+            thread.scrollTop += event.deltaY;
+          }}
         >
           <header className={styles.header}>
             <h2 id={titleId} className={styles.srOnly}>
