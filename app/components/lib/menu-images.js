@@ -43,7 +43,6 @@ export const menuImages = {
   "Jain Paneer": "/menu/jain-paneer.jpg",
   "Jain Veggie": "/menu/jain-veggie.jpg",
   "Jalapeno Ranch": "/menu/jalapeno-ranch.png",
-  "Kids CYO Pizza": "/menu/kids-cyo-pizza.jpg",
   "Kids Pepperoni Pizza": "/menu/kids-pepperoni-pizza.jpg",
   "Lemon Pepper Wings": "/menu/lemon-pepper-wings.jpg",
   "Malai Chicken": "/menu/malai-chicken.jpg",

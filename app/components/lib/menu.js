@@ -662,11 +662,6 @@ export const menuSections = [
         price: "$9.99",
         note: "Listed as an offer on the website.",
       },
-      {
-        name: "Kids CYO Pizza",
-        description: "Red sauce, cheese, and one free topping.",
-        price: "$9.99",
-      },
     ],
   },
   {
